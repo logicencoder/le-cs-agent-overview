@@ -1,54 +1,49 @@
 # LE CS Agent
 
-**LE CS Agent** (LogicEncoder Coding Station Agent) is a self-hosted chat workstation for trying and operating many LLM APIs from one dark UI. Private source: [le-cs-agent](https://github.com/logicencoder/le-cs-agent).
+**LE CS Agent** (Logic Encoder **Coding Station Agent**) is a self-hosted chat workstation for working with many LLM APIs from one dark browser UI. Pick a model, switch personas, stream replies, benchmark free providers, keep session history in DuckDB, and optionally hand the model a real shell in agent mode.
 
-Runs on **SOL** or a dev machine — **not** on the logicencoder.com WordPress host.
+Private source: [logicencoder/le-cs-agent](https://github.com/logicencoder/le-cs-agent). API keys live in `.env` on your machine — never in this overview repo.
 
-## What it is
+## The problem it solves
 
-**What:** A Node.js server plus a single-page web UI. You pick a model and persona, chat with streaming replies, inspect provider credits, benchmark free models, and optionally let the model run shell commands in agent mode.  
-**Why:** Scattered free-tier APIs (OpenRouter, Hugging Face, Groq, Cerebras, etc.) are painful to compare manually; one desk consolidates routing, logging, and session memory.  
-**Who:** The operator building or debugging LogicEncoder automation and tooling — not public site visitors.
+Free and paid model endpoints change weekly. Comparing OpenRouter, Hugging Face, Groq, Cerebras, Mistral, GitHub Models, NVIDIA, Google, and Pollinations from separate CLIs wastes time. LE CS Agent routes streaming chat, credit checks, model probes, and session export through one Node server and split-pane UI.
 
 ## Multi-provider chat
 
-**What:** Streaming completions over WebSocket; sidebar lists models from OpenRouter and other providers; personas change system behavior (engineer, hacker, normal, …).  
-**Why:** Different tasks need different models and prompts; switching must be instant without new CLI tools.  
-**Who:** Operator gets faster iteration; no direct end-user audience.
+WebSocket streaming to multiple backends from a single conversation view. The sidebar lists models (with free-tier highlighting where applicable). **Personas** — engineer, hacker, normal, and custom entries stored in DuckDB — change system behavior and temperature without restarting the server.
 
-## Model lab
+## Model lab and provider health
 
-**What:** REST endpoints to list free providers, test a single model (`/api/test-one`), store pass/fail latency in DuckDB `model_scores`.  
-**Why:** Free model lists rot weekly; automated probes show what still answers.  
-**Who:** Operator avoids broken model IDs in downstream pipelines (e.g. karaoke Automate, other LE apps).
+REST endpoints list free providers and models, run **`/api/test-one`** probes against any configured backend, and record pass/fail latency in DuckDB **`model_scores`**. Use this when free model IDs rot and you need a quick answer on what still responds before wiring models into other Logic Encoder pipelines.
+
+Credit and usage checks hit provider management APIs (`/api/credits`, `/api/status`) so you see balance and rate-limit headroom from the same desk.
 
 ## Session memory
 
-**What:** DuckDB file stores messages per session, export to Markdown, list sessions.  
-**Why:** Long debugging threads must survive browser refresh without external DB ops.  
-**Who:** Operator reviewing what was asked and which model replied.
+Conversations persist in **`cas_memory.duckdb`** — messages per session, persona metadata, and export to Markdown via `/api/export`. Long debugging threads survive browser refresh without standing up an external database.
 
-## Agent mode + terminal
+## Agent mode and embedded terminal
 
-**What:** Optional tab with real bash (via `node-pty` on Linux/WSL). In agent mode the model emits `<shell>command</shell>` tags; the server runs them and feeds output back into the chat.  
-**Why:** Coding agents need verified filesystem state, not guessed paths.  
-**Who:** Operator automating local fixes; **security:** only run on trusted machines — full shell access.
+An optional terminal tab runs real bash through **node-pty** (WSL or Linux). In **agent mode** the model can emit `<shell>…</shell>` blocks; the server executes them and returns stdout/stderr into the chat loop — useful when a coding agent must verify filesystem state instead of guessing paths.
+
+**Use agent mode only on trusted machines** — it is full shell access on the host running the server.
 
 ## Hybrid thinking stream
 
-**What:** When the model returns reasoning tokens, the UI shows a separate “thinking” stream before the final answer.  
-**Why:** Reasoning models (R1-style) are unreadable if reasoning and answer are merged blindly.  
-**Who:** Operator judging model quality on hard prompts.
+When a model returns separate reasoning tokens (R1-style), the UI shows a dedicated **thinking** stream before the final answer so you can judge chain-of-thought quality on hard prompts.
 
-## Related repositories
+## Quick start
 
-| Repo | Role |
-|------|------|
-| [le-cs-agent](https://github.com/logicencoder/le-cs-agent) | Private code |
-| [le-cs-agent-overview](https://github.com/logicencoder/le-cs-agent-overview) | This page |
+```bash
+npm install
+cp .env.example .env   # provider API keys
+npm start              # default port 3010 — node server.js
+```
 
-See [REPOS.md](REPOS.md).
+Open the served **`index.html`** — chat, model picker, personas, terminal tab, and live server logs in one layout.
 
-## Licensing
+See [REPOS.md](REPOS.md) for repository links.
 
-© LogicEncoder. Third-party APIs subject to their terms.
+---
+
+**Made by [Logic Encoder](https://logicencoder.com)** · [GitHub](https://github.com/logicencoder) · [Contact](https://logicencoder.com/contact/)
