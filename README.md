@@ -1,36 +1,44 @@
 # LE CS Agent
 
-**LE CS Agent** (Logic Encoder **Coding Station Agent**) is a self-hosted chat workstation for working with many LLM APIs from one dark browser UI. Pick a model, switch personas, stream replies, benchmark free providers, keep session history in DuckDB, and optionally hand the model a real shell in agent mode.
+**LE CS Agent** is a self-hosted AI workstation for running and comparing many LLM providers from one interface. It combines model routing, persona control, persistent session memory, benchmarking utilities, and optional shell-backed agent mode for hands-on operator workflows.
 
 Private source: [logicencoder/le-cs-agent](https://github.com/logicencoder/le-cs-agent). API keys live in `.env` on your machine — never in this overview repo.
 
-## The problem it solves
+## Tech stack
 
-Free and paid model endpoints change weekly. Comparing OpenRouter, Hugging Face, Groq, Cerebras, Mistral, GitHub Models, NVIDIA, Google, and Pollinations from separate CLIs wastes time. LE CS Agent routes streaming chat, credit checks, model probes, and session export through one Node server and split-pane UI.
+| Layer | Technologies |
+|-------|--------------|
+| Backend | Node.js server |
+| UI | Single-page chat and tools interface |
+| Providers | OpenRouter, Hugging Face router, Groq, Cerebras, Mistral, Google, NVIDIA, and others |
+| Persistence | DuckDB session and benchmark storage |
+| Agent runtime | `node-pty` terminal bridge for shell execution mode |
 
-## Multi-provider chat
+## Multi-provider chat desk
 
-WebSocket streaming to multiple backends from a single conversation view. The sidebar lists models (with free-tier highlighting where applicable). **Personas** — engineer, hacker, normal, and custom entries stored in DuckDB — change system behavior and temperature without restarting the server.
+Streaming chat responses, model switching, and persona presets are handled in one desk. This lets operators move between reasoning-heavy and speed-focused models without rebuilding prompts in separate tools.
 
-## Model lab and provider health
+The provider abstraction is designed for real operator usage: when one API is degraded, the session can continue on another provider with minimal friction.
 
-REST endpoints list free providers and models, run **`/api/test-one`** probes against any configured backend, and record pass/fail latency in DuckDB **`model_scores`**. Use this when free model IDs rot and you need a quick answer on what still responds before wiring models into other Logic Encoder pipelines.
+## Model lab and benchmark utilities
 
-Credit and usage checks hit provider management APIs (`/api/credits`, `/api/status`) so you see balance and rate-limit headroom from the same desk.
+The model lab endpoints test candidates and store pass/fail plus latency metadata. This keeps a historical view of which model IDs are currently usable and which ones have become unstable.
 
-## Session memory
+That data is used to choose practical defaults for other Logic Encoder automation projects where free-tier and low-cost model quality changes frequently.
 
-Conversations persist in **`cas_memory.duckdb`** — messages per session, persona metadata, and export to Markdown via `/api/export`. Long debugging threads survive browser refresh without standing up an external database.
+## Session memory and history
 
-## Agent mode and embedded terminal
+DuckDB-backed storage keeps session threads durable across browser reloads. Operators can revisit previous runs, compare outputs from different models, and export chats for follow-up implementation work.
 
-An optional terminal tab runs real bash through **node-pty** (WSL or Linux). In **agent mode** the model can emit `<shell>…</shell>` blocks; the server executes them and returns stdout/stderr into the chat loop — useful when a coding agent must verify filesystem state instead of guessing paths.
+## Agent mode with embedded terminal
 
-**Use agent mode only on trusted machines** — it is full shell access on the host running the server.
+LE CS Agent can run shell commands through a terminal bridge in agent mode. This supports workflows where model responses need verified command output or direct filesystem interaction instead of pure text suggestions.
+
+Because this mode executes real commands, it is intended for trusted environments and operator-controlled machines.
 
 ## Hybrid thinking stream
 
-When a model returns separate reasoning tokens (R1-style), the UI shows a dedicated **thinking** stream before the final answer so you can judge chain-of-thought quality on hard prompts.
+For models that return reasoning content, the interface can display thinking output separately from final answers. This makes model behavior easier to evaluate during debugging, prompt tuning, and provider comparisons.
 
 ## Quick start
 
