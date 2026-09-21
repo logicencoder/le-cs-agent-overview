@@ -4,7 +4,7 @@
 
 **LE CS Agent** (Logic Encoder Coding Station Agent) is a single-page tool that routes chat across **OpenRouter free models**, **Hugging Face Inference Router**, and eight additional providers in the model lab. Stream responses, switch personas, attach files and screenshots, benchmark which models are online today, and — in the Terminal tab — let the model execute WSL/bash commands via `<shell>…</shell>` agent mode with live output fed back into the conversation.
 
-Built for **operators who want one desk** instead of separate browser tabs per provider. API keys live in `.env` on your machine; this overview describes product behaviour only.
+Built for **operators who want one desk** instead of separate browser tabs per provider. API keys live in `.env` on your machine.
 
 **Made by [Logic Encoder](https://logicencoder.com)**
 
@@ -12,7 +12,23 @@ Private source: [logicencoder/le-cs-agent](https://github.com/logicencoder/le-cs
 
 ---
 
-## What you can do
+## Tech stack
+
+| Layer | Technologies |
+|-------|----------------|
+| Runtime | Node.js |
+| HTTP server | Fastify 5 |
+| Real-time | `ws` WebSocket on the same port |
+| Database | DuckDB (`cas_memory.duckdb` — sessions, personas, model scores) |
+| Terminal | `node-pty` + xterm.js + Fit addon |
+| Frontend | Vanilla HTML/CSS/JS — no build step |
+| Utilities | JSZip for code-block ZIP export |
+| Providers | OpenRouter, Hugging Face Router, Groq, Cerebras, Mistral, GitHub Models, NVIDIA NIM, Google AI Studio, Pollinations |
+| Quality | Playwright scripts for agent-mode verification (dev) |
+
+---
+
+## Desk surfaces
 
 | Area | In plain language |
 |------|-------------------|
@@ -31,7 +47,7 @@ Chat streams over **WebSocket**; the terminal uses the same connection for PTY I
 
 ---
 
-## Feature examples (two per capability)
+## Operator workflows
 
 #### Multi-provider free chat
 1. You pick `qwen/qwen3-coder:free` from the sidebar and ask for a Python refactor; tokens stream into the message pane with latency stats.
@@ -123,32 +139,8 @@ Chat streams over **WebSocket**; the terminal uses the same connection for PTY I
 
 ---
 
-## What it does not do
+**Scope:** a self-hosted desk on your workstation — you supply the API keys. Streaming chat runs over OpenRouter and the HF router; the model lab exercises the remaining providers on demand. Shell mode executes real commands and is intended for machines you trust. The desk complements your editor rather than replacing it. API keys and the session database stay on your machine.
 
-- **Not** a cloud SaaS — runs on your workstation; you supply API keys
-- **Not** full round-robin chat across all nine providers — streaming chat uses OpenRouter and HF router; the lab exercises the rest
-- **Not** sandboxed agent execution — shell mode runs real commands; use on trusted machines only
-- **Not** a replacement for a full IDE — complements your editor with chat, terminal, and model comparison
-
-API keys and session database stay on your machine — not published in this overview repo.
-
----
-
-## Tech stack
-
-| Layer | Technologies |
-|-------|----------------|
-| Runtime | Node.js |
-| HTTP server | Fastify 5 |
-| Real-time | `ws` WebSocket on the same port |
-| Database | DuckDB (`cas_memory.duckdb` — sessions, personas, model scores) |
-| Terminal | `node-pty` + xterm.js + Fit addon |
-| Frontend | Vanilla HTML/CSS/JS — no build step |
-| Utilities | JSZip for code-block ZIP export |
-| Providers | OpenRouter, Hugging Face Router, Groq, Cerebras, Mistral, GitHub Models, NVIDIA NIM, Google AI Studio, Pollinations |
-| Quality | Playwright scripts for agent-mode verification (dev) |
-
----
 
 ## Quick start
 
