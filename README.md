@@ -1,5 +1,7 @@
 # LE CS Agent — Logic Encoder Coding Station
 
+![LE CS Agent — chat console with model routing and provider status](assets/le-cs-agent.png)
+
 **A self-hosted AI workstation that combines multi-provider LLM chat, model benchmarking, DuckDB session memory, editable personas, and an embedded terminal where the model can run real shell commands — built for daily coding on your own machine.**
 
 **LE CS Agent** (Logic Encoder Coding Station Agent) is a single-page tool that routes chat across **OpenRouter free models**, **Hugging Face Inference Router**, and eight additional providers in the model lab. Stream responses, switch personas, attach files and screenshots, benchmark which models are online today, and — in the Terminal tab — let the model execute WSL/bash commands via `<shell>…</shell>` agent mode with live output fed back into the conversation.
