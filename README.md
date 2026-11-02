@@ -1,57 +1,51 @@
 # LE CS Agent — Coding Station
 
-**LE CS Agent** is a self-hosted AI workstation for running and comparing many LLM providers from one interface. It combines model routing, persona control, persistent session memory, benchmarking utilities, and optional shell-backed agent mode for hands-on operator workflows.
+![LE CS Agent — Coding Station workspace](assets/le-cs-agent.png)
 
-Private source: [logicencoder/le-cs-agent](https://github.com/logicencoder/le-cs-agent). API keys live in `.env` on your machine — never in this overview repo.
+Working with several AI providers can scatter conversations, model choices and coding work across different interfaces. LE CS Agent brings them into one coding station, combining a multi-provider conversation workspace, saved sessions and terminal access for a more continuous workflow.
 
 ## Tech stack
 
 | Layer | Technologies |
-|-------|--------------|
-| Backend | Node.js server |
-| UI | Single-page chat and tools interface |
-| Providers | OpenRouter, Hugging Face router, Groq, Cerebras, Mistral, Google, NVIDIA, and others |
-| Persistence | DuckDB session and benchmark storage |
-| Agent runtime | `node-pty` terminal bridge for shell execution mode |
+|---|---|
+| Application | JavaScript, Node.js, Fastify |
+| Supporting technologies | HTML, CSS; DuckDB; xterm.js |
 
-## Multi-provider chat desk
+## Choose a model for the task
 
-Streaming chat responses, model switching, and persona presets are handled in one desk. This lets operators move between reasoning-heavy and speed-focused models without rebuilding prompts in separate tools.
+Select from the configured providers and supported models without rebuilding the conversation in a different application. Streaming responses keep progress visible, while available reasoning and search options support tasks that need a different approach. Usage information helps keep the current provider context in view.
 
-The provider abstraction is designed for real operator usage: when one API is degraded, the session can continue on another provider with minimal friction.
+A task may call for a different model without calling for a different workspace. The station keeps model selection and conversation tools close so the operator can choose deliberately.
 
-## Model lab and benchmark utilities
+## Bring files and images into the discussion
 
-The model lab endpoints test candidates and store pass/fail plus latency metadata. This keeps a historical view of which model IDs are currently usable and which ones have become unstable.
+Attach relevant text or a screenshot when the model needs context beyond a written question. Supported vision models can work with images, while reusable personas help establish the type of assistance wanted. Custom personas let the workspace adapt to recurring tasks.
 
-That data is used to choose practical defaults for other Logic Encoder automation projects where free-tier and low-cost model quality changes frequently.
+Files and images reduce the gap between describing a problem and showing the relevant material. Personas provide a reusable starting point when the same kind of assistance is needed again.
 
-## Session memory and history
+## Keep conversations useful
 
-DuckDB-backed storage keeps session threads durable across browser reloads. Operators can revisit previous runs, compare outputs from different models, and export chats for follow-up implementation work.
-
-## Agent mode with embedded terminal
-
-LE CS Agent can run shell commands through a terminal bridge in agent mode. This supports workflows where model responses need verified command output or direct filesystem interaction instead of pure text suggestions.
-
-Because this mode executes real commands, it is intended for trusted environments and operator-controlled machines.
+Saved sessions make it easier to return to an investigation or switch between pieces of work. Export a conversation when the result should be retained outside the station, and use code export tools where appropriate. This reduces repeated explanation when a task spans several sessions.
 
 Saved conversations preserve the context of an investigation. Returning to a session is particularly useful when comparing approaches or continuing work after an interruption.
 
-For models that return reasoning content, the interface can display thinking output separately from final answers. This makes model behavior easier to evaluate during debugging, prompt tuning, and provider comparisons.
+## Work beside a terminal
 
-## Quick start
+An embedded terminal keeps command-line work close to the discussion. The available agent mode connects model-assisted work with terminal output, while explicit session controls let the operator manage that workspace. This is an operational capability whose use should remain deliberate.
 
-```bash
-npm install
-cp .env.example .env   # provider API keys
-npm start              # default port 3010 — node server.js
-```
+Discussion and command-line work can inform each other in the same session. The terminal remains visible as a working surface rather than an unexplained action happening elsewhere.
 
-Open the served **`index.html`** — chat, model picker, personas, terminal tab, and live server logs in one layout.
+## Compare and troubleshoot
 
-See [REPOS.md](REPOS.md) for repository links.
+The model lab supports trying configured models on comparable tasks, helping choose a suitable option from experience rather than name alone. Logs and connection information assist with provider problems. Together, these areas make model experimentation part of the working station rather than a separate exercise.
+
+Model comparisons are most useful when the task is comparable. The lab provides a place to examine the available choices, while diagnostics help separate a provider problem from the content of a response.
+
 
 ---
 
-**Made by [Logic Encoder](https://logicencoder.com)** · [GitHub](https://github.com/logicencoder) · [Contact](https://logicencoder.com/contact/)
+Private code: [le-cs-agent](https://github.com/logicencoder/le-cs-agent)
+
+See [REPOS.md](REPOS.md) for related repositories.
+
+**[Logic Encoder](https://logicencoder.com)** · [GitHub](https://github.com/logicencoder) · [Contact](https://logicencoder.com/contact/)
