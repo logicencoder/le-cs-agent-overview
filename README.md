@@ -1,4 +1,4 @@
-# LE CS Agent
+# LE CS Agent — Coding Station
 
 **LE CS Agent** is a self-hosted AI workstation for running and comparing many LLM providers from one interface. It combines model routing, persona control, persistent session memory, benchmarking utilities, and optional shell-backed agent mode for hands-on operator workflows.
 
@@ -36,7 +36,7 @@ LE CS Agent can run shell commands through a terminal bridge in agent mode. This
 
 Because this mode executes real commands, it is intended for trusted environments and operator-controlled machines.
 
-## Hybrid thinking stream
+Saved conversations preserve the context of an investigation. Returning to a session is particularly useful when comparing approaches or continuing work after an interruption.
 
 For models that return reasoning content, the interface can display thinking output separately from final answers. This makes model behavior easier to evaluate during debugging, prompt tuning, and provider comparisons.
 
