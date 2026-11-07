@@ -1,6 +1,6 @@
 # LE CS Agent — Coding Station
 
-![LE CS Agent — Coding Station workspace](assets/le-cs-agent.png)
+![LE CS Agent — Coding Station workspace](assets/le-cs-agent-coding-station-workspace.png)
 
 Working with several AI providers can scatter conversations, model choices and coding work across different interfaces. LE CS Agent brings them into one coding station, combining a multi-provider conversation workspace, saved sessions and terminal access for a more continuous workflow.
 
